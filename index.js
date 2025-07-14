@@ -26,9 +26,10 @@ app.post("/run", async (req, res) => {
   const tempFile = path.join(__dirname, `temp_${Date.now()}.pyowo`);
   fs.writeFileSync(tempFile, code);
 
-  const proc = spawn("python", ["pythowo.py", tempFile], {
-    cwd: __dirname,
-  });
+  // 🔥 Use full absolute path to pythowo.py
+  const pythowoPath = path.join(__dirname, "pythowo.py");
+
+  const proc = spawn("python", [pythowoPath, tempFile]);
 
   let stdout = "";
   let stderr = "";
