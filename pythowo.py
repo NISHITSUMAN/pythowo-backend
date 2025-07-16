@@ -1297,98 +1297,96 @@ class Parser:
 
         return res.success(WhileNode(condition, body, False))
 
-   def func_def(self):
-    res = ParseResult()
+       def func_def(self):
+        res = ParseResult()
 
-    if not self.current_tok.matches(TT_KEYWORD, "FWUNCTION"):
-        return res.failure(
-            InvalidSyntaxError(
-                self.current_tok.pos_start,
-                self.current_tok.pos_end,
-                f"Expwected 'FWUNCTION'",
-            )
-        )
-
-    res.register_advancement()
-    self.advance()
-
-    var_name_tok = None
-    if self.current_tok.type == TT_IDENTIFIER:
-        var_name_tok = self.current_tok
-        res.register_advancement()
-        self.advance()
-
-    arg_name_toks = []
-
-   
-    if self.current_tok.type == TT_LPAREN:
-        res.register_advancement()
-        self.advance()
-
-        if self.current_tok.type == TT_IDENTIFIER:
-            arg_name_toks.append(self.current_tok)
-            res.register_advancement()
-            self.advance()
-
-            while self.current_tok.type == TT_COMMA:
-                res.register_advancement()
-                self.advance()
-
-                if self.current_tok.type != TT_IDENTIFIER:
-                    return res.failure(
-                        InvalidSyntaxError(
-                            self.current_tok.pos_start,
-                            self.current_tok.pos_end,
-                            "Expwected identifiew",
-                        )
-                    )
-
-                arg_name_toks.append(self.current_tok)
-                res.register_advancement()
-                self.advance()
-
-        if self.current_tok.type != TT_RPAREN:
+        if not self.current_tok.matches(TT_KEYWORD, "FWUNCTION"):
             return res.failure(
                 InvalidSyntaxError(
                     self.current_tok.pos_start,
                     self.current_tok.pos_end,
-                    "Expwected ',' or ')'",
+                    f"Expwected 'FWUNCTION'",
                 )
             )
 
         res.register_advancement()
         self.advance()
 
+        var_name_tok = None
+        if self.current_tok.type == TT_IDENTIFIER:
+            var_name_tok = self.current_tok
+            res.register_advancement()
+            self.advance()
 
-    if self.current_tok.type != TT_NEWLINE:
-        return res.failure(
-            InvalidSyntaxError(
-                self.current_tok.pos_start,
-                self.current_tok.pos_end,
-                f"Expwected NEWLINE",
+        arg_name_toks = []
+
+        if self.current_tok.type == TT_LPAREN:
+            res.register_advancement()
+            self.advance()
+
+            if self.current_tok.type == TT_IDENTIFIER:
+                arg_name_toks.append(self.current_tok)
+                res.register_advancement()
+                self.advance()
+
+                while self.current_tok.type == TT_COMMA:
+                    res.register_advancement()
+                    self.advance()
+
+                    if self.current_tok.type != TT_IDENTIFIER:
+                        return res.failure(
+                            InvalidSyntaxError(
+                                self.current_tok.pos_start,
+                                self.current_tok.pos_end,
+                                "Expwected identifiew",
+                            )
+                        )
+
+                    arg_name_toks.append(self.current_tok)
+                    res.register_advancement()
+                    self.advance()
+
+            if self.current_tok.type != TT_RPAREN:
+                return res.failure(
+                    InvalidSyntaxError(
+                        self.current_tok.pos_start,
+                        self.current_tok.pos_end,
+                        "Expwected ',' or ')'",
+                    )
+                )
+
+            res.register_advancement()
+            self.advance()
+
+        if self.current_tok.type != TT_NEWLINE:
+            return res.failure(
+                InvalidSyntaxError(
+                    self.current_tok.pos_start,
+                    self.current_tok.pos_end,
+                    f"Expwected NEWLINE",
+                )
             )
-        )
 
-    res.register_advancement()
-    self.advance()
+        res.register_advancement()
+        self.advance()
 
-    body = res.register(self.statements())
-    if res.error:
-        return res
+        body = res.register(self.statements())
+        if res.error:
+            return res
 
-    if not self.current_tok.matches(TT_KEYWORD, "END"):
-        return res.failure(
-            InvalidSyntaxError(
-                self.current_tok.pos_start,
-                self.current_tok.pos_end,
-                f"Expwected 'END'",
+        if not self.current_tok.matches(TT_KEYWORD, "END"):
+            return res.failure(
+                InvalidSyntaxError(
+                    self.current_tok.pos_start,
+                    self.current_tok.pos_end,
+                    f"Expwected 'END'",
+                )
             )
-        )
 
-    res.register_advancement()
-    self.advance()
+        res.register_advancement()
+        self.advance()
 
-    return res.success(FuncDefNode(var_name_tok, arg_name_toks, body, False))
+        return res.success(FuncDefNode(var_name_tok, arg_name_toks, body, False))
 
     ###################################
 
