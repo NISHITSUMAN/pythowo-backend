@@ -1,4 +1,4 @@
-# cowode stowlen shamewesswy fwom: https://github.com/davidcallanan/py-myopl-code
+
 
 #######################################
 # IMPOWORTS
